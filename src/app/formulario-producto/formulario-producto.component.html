@@ -1,4 +1,4 @@
-<form [formGroup]="productForm" (submit)="addProduct()">
+<form [formGroup]="productForm" (ngSubmit)="addProduct()">
     <div class="mb-3">
         <label for="idProduct" class="form-label">ID Producto:</label>
         <input type="text" class="form-control" formControlName="idProduct" required>
