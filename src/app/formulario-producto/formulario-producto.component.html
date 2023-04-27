@@ -1,0 +1,30 @@
+<form [formGroup]="productForm" (submit)="addProduct()">
+    <div class="mb-3">
+        <label for="idProduct" class="form-label">ID Producto:</label>
+        <input type="text" class="form-control" formControlName="idProduct" required>
+    </div>
+    <div class="mb-3">
+        <label for="idProduct" class="form-label">Cantidad:</label>
+        <input type="text" class="form-control" formControlName="quantity" required>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!productForm.valid">Agregar Producto</button>
+</form>
+
+
+
+<table class="table" *ngIf="orderDetail.length>0">
+    <thead>
+      <tr>
+        <th scope="col">ID Producto</th>
+        <th scope="col">Cantidad</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of orderDetail">
+        <td>{{product.idProduct}}</td>
+        <td>{{product.quantity}}</td>
+        <td><button type="button" class="btn-close" aria-label="Close" (click)="removeDetailOrder(product.idProduct)"></button></td>
+      </tr>
+    </tbody>
+  </table>

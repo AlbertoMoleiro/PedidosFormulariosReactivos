@@ -1,0 +1,103 @@
+<div class="rounded shadow p-4">
+    <h2>Realizar Pedido</h2>
+    <form [formGroup]="orderForm" (submit)="placeOrder()">
+        <div class="mb-3">
+            <label for="idClient" class="form-label">ID Cliente</label>
+            <input type="text" class="form-control" formControlName="idClient" required>
+        </div>
+        <div class="mb-3">
+            <label for="payment" class="form-label">Forma de pago</label>
+            <select class="form-select" aria-label="Default select example" formControlName="payment" required>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta de crédito">Tarjeta de crédito</option>
+                <option value="Tarjeta de débito">Tarjeta de débito</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label">Dirección Entrega:</label>
+            <input type="text" class="form-control" formControlName="address" required>
+        </div>
+
+        <button type="button" class="btn btn-primary mb-3" [routerLink]="['formulario-producto',order.idOrder]"
+            data-bs-toggle="modal" data-bs-target="#exampleModal" data-backdrop="static" data-keyboard="false">Agregar
+            producto</button>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="!orderForm.valid"
+                *ngIf="orderDetail.length>0 else agregarDisabled">Confirmar Pedido</button>
+            <ng-template #agregarDisabled>
+                <button type="button" class="btn btn-secondary" disabled>Confirmar Pedido</button>
+            </ng-template>
+            <button type="button" class="btn btn-danger" (click)="resetOrder()">Cancelar Pedido</button>
+        </div>
+
+    </form>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalle de Pedido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        routerLink=""></button>
+                </div>
+                <div class="modal-body">
+                    <router-outlet></router-outlet>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" routerLink="">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="rounded p-4 mt-4 shadow" *ngIf="orders.length>0">
+    <table class="table text-center">
+        <thead>
+            <tr>
+                <th scope="col">ID Pedido</th>
+                <th scope="col">ID Cliente</th>
+                <th scope="col">Dirección de Entrega</th>
+                <th scope="col">Detalle Pedido</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let order of orders;let i=index">
+                <td>{{order.idOrder}}</td>
+                <td>{{order.idClient}}</td>
+                <td>{{order.address}}</td>
+                <td>
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne"[attr.aria-expanded]="i==0" aria-controls="collapseOne">
+                                    Detalle Pedido {{order.idOrder}}
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" [ngClass]="{collapsed:i>=1,show:i<1}" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">ID Producto</th>
+                                                <th scope="col">Cantidad</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let detail of getDetailById(order.idOrder)">
+                                                <td>{{detail.idProduct}}</td>
+                                                <td>{{detail.quantity}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
